@@ -8,7 +8,7 @@
 * You are encouraged to use and learn from AI tools (Copilot..etc) to speed up your workflow.
 
 ## Deadline
-* February 17, 2025 | 11:59 PM
+* February 24, 2025 | 11:59 PM
 * Submit your output via PR.
 * A random student will be called to present his/her first RESTful API in class written in Python + Flask.
 
