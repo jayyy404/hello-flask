@@ -4,7 +4,7 @@ import json
 app = Flask(__name__)
 
 # Load JSON data
-with open("diseases.json", "r") as file:
+with open("Canete\diseases.json", "r") as file:
     diseases = json.load(file)
 
 @app.route("/")
