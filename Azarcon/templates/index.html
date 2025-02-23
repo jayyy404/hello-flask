@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ICD Code Lookup</title>
+</head>
+<body>
+    <h1>ICD Code Lookup</h1>
+    <form action="/lookup" method="post">
+        <label for="query">Enter disease name or ICD code:</label>
+        <input type="text" id="query" name="query" required>
+        <button type="submit">Lookup</button>
+    </form>
+    <div id="results"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            fetch('/lookup', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('results');
+                if (data.length > 0) {
+                    resultsDiv.innerHTML = '<h2>Results:</h2>' + data.map(disease => `
+                        <div>
+                            <h3>${disease.primary_name}</h3>
+                            <p><strong>ICD-10-CM Codes:</strong> ${disease.icd10cm_codes}</p>
+                            <p><strong>Type:</strong> ${disease.is_procedure ? 'Medical Procedure (e.g., surgery, diagnostic tests)' : 'Disease or Condition'}</p>
+                            <p><strong>Synonyms:</strong> ${disease.synonyms.join(', ')}</p>
+                            <p><strong>Info Links:</strong></p>
+                            <ul>
+                                ${disease.info_links.map(link => `<li><a href="${link[0]}" target="_blank">${link[1]}</a></li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('');
+                } else {
+                    resultsDiv.innerHTML = '<p>No results found.</p>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
