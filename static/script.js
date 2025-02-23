@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 diseases.forEach(disease => {
                     const li = document.createElement("li");
                     li.innerHTML = `
-                        <span class="font-bold">${disease.primary_name}</span>
+                        <span>${disease.primary_name}</span>
                     `;
                     li.classList.add("p-2", "cursor-pointer", "hover:bg-gray-200");
 
