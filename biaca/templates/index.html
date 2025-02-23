@@ -9,16 +9,42 @@
     <style>
         body {
             font-size: 18px;  
-        }
+            background-image: url('/static/bg.png'); 
+            background-size: cover;      
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            background-size: 90%;  
+        }        
+        
         h1 {
             font-family: 'MedievalSharp', fantasy;
             font-size: 70px;
         }
         
+        .card {
+            width: 90%;               
+            max-width: 679px;         
+            margin: 0 auto;          
+            padding: 20px;          
+        }
+        /* For smaller screens like tablets */
+@media (max-width: 992px) {
+    body {
+        background-size: 150%;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+    body {
+        background-size: 200%;
+    }
+}
         
     </style>
 </head>
-<body class="bg-light">
+<body>
     <div class="container py-5">
         <h1 class="text-center mb-4">Albularyo</h1>
         <form id="diagnosisForm" class="card p-4 shadow-sm">
@@ -105,5 +131,6 @@
         });
         
     </script>
+    
 </body>
 </html>
