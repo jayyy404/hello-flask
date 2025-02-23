@@ -29,12 +29,14 @@ def search_diseases():
             results.append({
                 "key_id": disease["key_id"],
                 "primary_name": disease["primary_name"],
+                "is_procedure": bool(disease.get("is_procedure", False)),  
                 "synonyms": disease.get("synonyms", []),
                 "icd10cm": disease.get("icd10cm", []),
                 "info_links": disease.get("info_link_data", [])
             })
 
     return jsonify(results)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

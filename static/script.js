@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 diseases.forEach(disease => {
                     const li = document.createElement("li");
-                    li.textContent = disease.primary_name;
+                    li.innerHTML = `
+                        <span class="font-bold">${disease.primary_name}</span>
+                    `;
                     li.classList.add("p-2", "cursor-pointer", "hover:bg-gray-200");
 
                     li.addEventListener("click", () => {
@@ -48,7 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
             <h2 class="text-xl font-bold">${disease.primary_name}</h2>
             <p><strong>Synonyms:</strong> ${disease.synonyms.join(", ") || "None"}</p>
             <p><strong>ICD-10 Codes:</strong> ${disease.icd10cm.map(icd => `${icd.code} - ${icd.name}`).join(", ") || "None"}</p>
-            <p><strong>More Info:</strong> ${disease.info_links.length > 0 ? `<a href="${disease.info_links[0][0]}" target="_blank">${disease.info_links[0][1]}</a>` : "N/A"}</p>
+            <p><strong>Is Procedure:</strong> ${disease.is_procedure ? "Yes" : "No"}</p>
+            <p><strong>More Info:</strong> ${disease.info_links.length > 0 ? `<a href="${disease.info_links[0][0]}" target="_blank" class="text-blue-500 underline">${disease.info_links[0][1]}</a>` : "N/A"}</p>
         `;
         diseaseInfo.classList.remove("hidden");
     }
