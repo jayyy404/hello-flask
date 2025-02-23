@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, jsonify
 import json
-
-app = Flask(__name__, template_folder="frontend")
-
+import os
 
 
-with open("diseases.json", encoding="utf-8") as f:
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+
+app = Flask(__name__, template_folder=os.path.join(BASE_DIR, "frontend"))
+
+json_path = os.path.join(BASE_DIR, "diseases.json")
+with open(json_path, encoding="utf-8") as f:
     diseases_data = json.load(f)
 
 @app.route("/", methods=["GET", "POST"])
