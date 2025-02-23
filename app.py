@@ -3,34 +3,38 @@ import json
 
 app = Flask(__name__)
 
-# Load data from JSON
-with open("diseases.json") as f:
-    diseases_data = json.load(f)
+# Load JSON data
+with open("diseases.json", "r") as file:
+    diseases = json.load(file)
 
-# Get list of all symptoms
-@app.route('/symptoms', methods=['GET'])
-def get_symptoms():
-    symptoms = set()
-    for disease in diseases_data:
-        symptoms.update(disease["symptoms"])
-    return jsonify(sorted(symptoms))
-
-# Predict disease based on symptoms
-@app.route('/predict', methods=['POST'])
-def predict_disease():
-    data = request.get_json()
-    symptoms = set(data.get("symptoms", []))
-
-    for disease in diseases_data:
-        if symptoms.issubset(set(disease["symptoms"])):
-            return jsonify({"disease": disease["name"]})
-
-    return jsonify({"disease": None})
-
-# Serve the frontend
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    """Serve the frontend"""
+    return render_template("index.html")
 
-if __name__ == '__main__':
+@app.route("/search", methods=["GET"])
+def search_diseases():
+    """Search for diseases by name or synonyms"""
+    query = request.args.get("q", "").strip().lower()
+    if not query:
+        return jsonify([])
+
+    results = []
+    
+    for disease in diseases:
+        name_match = query in disease["primary_name"].lower()
+        synonym_match = any(query in synonym.lower() for synonym in disease.get("synonyms", []))
+
+        if name_match or synonym_match:
+            results.append({
+                "key_id": disease["key_id"],
+                "primary_name": disease["primary_name"],
+                "synonyms": disease.get("synonyms", []),
+                "icd10cm": disease.get("icd10cm", []),
+                "info_links": disease.get("info_link_data", [])
+            })
+
+    return jsonify(results)
+
+if __name__ == "__main__":
     app.run(debug=True)

@@ -3,97 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sick? Symptom Checker</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        .search-box { padding: 10px; width: 300px; }
-        .autocomplete-list { list-style: none; padding: 0; max-width: 320px; margin: auto; border: 1px solid #ddd; }
-        .autocomplete-list li { padding: 8px; cursor: pointer; background: #f9f9f9; }
-        .autocomplete-list li:hover { background: #ddd; }
-        .selected-symptoms { margin-top: 20px; }
-        .symptom-tag { display: inline-block; background: #007bff; color: white; padding: 5px 10px; margin: 5px; border-radius: 5px; cursor: pointer; }
-    </style>
+    <title>Disease Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
-<body>
-
-    <h1>Sick?</h1>
-    <p>Maybe I can help. How are you feeling today?</p>
-
-    <input type="text" id="symptomSearch" class="search-box" placeholder="Find your symptom..." onkeyup="searchSymptoms()">
-    <ul id="autocompleteList" class="autocomplete-list"></ul>
-
-    <div class="selected-symptoms">
-        <h3>Selected Symptoms:</h3>
-        <div id="selectedSymptoms"></div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+        <h1 class="text-2xl font-bold mb-4 text-center">Disease Search</h1>
+        
+        <input type="text" id="searchInput" class="w-full p-2 border rounded-lg" placeholder="Search for a disease...">
+        
+        <ul id="suggestions" class="mt-2 border rounded-lg bg-white max-h-40 overflow-y-auto hidden"></ul>
+        
+        <div id="diseaseInfo" class="mt-4 p-4 border rounded-lg hidden"></div>
     </div>
-
-    <button onclick="submitSymptoms()">Submit</button>
-
-    <h2 id="diagnosisResult"></h2>
-
-    <script>
-        let allSymptoms = [];
-        let selectedSymptoms = [];
-
-        // Fetch symptoms from Flask API
-        async function fetchSymptoms() {
-            const response = await fetch('/symptoms');
-            allSymptoms = await response.json();
-        }
-
-        fetchSymptoms(); // Load symptoms on page load
-
-        function searchSymptoms() {
-            const input = document.getElementById('symptomSearch').value.toLowerCase();
-            const list = document.getElementById('autocompleteList');
-            list.innerHTML = '';
-
-            if (input) {
-                allSymptoms.filter(symptom => symptom.toLowerCase().includes(input)).forEach(symptom => {
-                    const li = document.createElement('li');
-                    li.textContent = symptom;
-                    li.onclick = () => addSymptom(symptom);
-                    list.appendChild(li);
-                });
-            }
-        }
-
-        function addSymptom(symptom) {
-            if (!selectedSymptoms.includes(symptom)) {
-                selectedSymptoms.push(symptom);
-                updateSelectedSymptoms();
-            }
-            document.getElementById('symptomSearch').value = '';
-            document.getElementById('autocompleteList').innerHTML = '';
-        }
-
-        function updateSelectedSymptoms() {
-            const container = document.getElementById('selectedSymptoms');
-            container.innerHTML = '';
-            selectedSymptoms.forEach(symptom => {
-                const span = document.createElement('span');
-                span.textContent = symptom;
-                span.className = 'symptom-tag';
-                span.onclick = () => removeSymptom(symptom);
-                container.appendChild(span);
-            });
-        }
-
-        function removeSymptom(symptom) {
-            selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
-            updateSelectedSymptoms();
-        }
-
-        async function submitSymptoms() {
-            const response = await fetch('/predict', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ symptoms: selectedSymptoms })
-            });
-            const data = await response.json();
-            document.getElementById('diagnosisResult').innerText = data.disease ? `Possible disease: ${data.disease}` : 'No matching disease found';
-        }
-    </script>
-
 </body>
 </html>
