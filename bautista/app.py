@@ -19,19 +19,19 @@ def get_diseases():
     """Returns all diseases in the dataset."""
     return jsonify(diseases)
 
-@app.route("/disease/<string:name>", methods=["GET"])
-def get_disease(name):
-    """Search for a disease by primary name or synonym."""
+@app.route("/disease/<string:name>")
+def disease_detail(name):
+    """Render the disease detail page."""
+    # Search for disease in the diseases list
     name_lower = name.lower()
+    disease = next(
+        (disease for disease in diseases if
+         disease["primary_name"].lower() == name_lower or
+         any(syn.lower() == name_lower for syn in disease.get("synonyms", []))),
+        None
+    )
     
-    for disease in diseases:
-        if (
-            disease["primary_name"].lower() == name_lower or
-            any(syn.lower() == name_lower for syn in disease.get("synonyms", []))
-        ):
-            return jsonify(disease)
-
-    return jsonify({"error": "Disease not found"}), 404
+    return render_template("disease_detail.html", disease=disease)
 
 @app.route("/diagnose", methods=["GET"])
 def diagnose():
