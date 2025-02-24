@@ -54,3 +54,17 @@ li {
     width: 80%;
     max-width: 600px;
 }
+
+.info-text {
+    font-style: italic;
+    color: #666;
+}
+
+.info-link {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.info-link:hover {
+    text-decoration: underline;
+}
