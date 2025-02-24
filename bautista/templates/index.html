@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnostica - Disease Diagnosis</title>
+    <title>DiagnoSearch - Disease Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 
     <div class="title-container">
-        <h1>Diagnostica</h1>
+        <h1>DiagnoSearch</h1>
     </div>
 
     <div class="container">
         <p>
-            Diagnostica is a simple tool designed to help you identify possible health conditions based on your symptoms. 
-            Enter your symptoms below and we will suggest possible conditions based on your input.
+            DiagnoSearch is a simple tool designed to help you identify diseases. 
+            Provide key terms and we will check matched diseases from our database.
         </p>
 
         <form id="symptom-form">
-            <label for="symptoms">Enter symptoms:</label>
-            <input type="text" id="symptoms" name="symptoms" placeholder="e.g., fever, headache, nausea" required>
-            <button type="submit">Diagnose</button>
+            <label for="symptoms">Enter key terms:</label>
+            <input type="text" id="symptoms" name="symptoms" placeholder="e.g., fever, cough, nausea" required>
+            <button type="submit">search</button>
         </form>
 
         <div id="error" class="error"></div>
         <div id="results" style="display: none;">
-            <p>Based on your symptoms, you may have the following conditions:</p>
+            <p>The following diseases matched your input:</p>
             <ul id="disease-list"></ul>
         </div>
     </div>
