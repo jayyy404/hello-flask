@@ -3,7 +3,7 @@ import json
 import os
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-json_path = os.path.join(BASE_DIR, "diseases.json")
+json_path = os.path.join(BASE_DIR, "hallares", "diseases.json")
 
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, "frontend"))
 
