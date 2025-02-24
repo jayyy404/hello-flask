@@ -15,7 +15,7 @@ try:
 except FileNotFoundError:
     diseases = []  # If file is missing, start with an empty list
 
-# HTML Template
+# HTML + CSS Template
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +23,73 @@ HTML_TEMPLATE = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diseases Information</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        /* Search Box */
+        input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Search Results */
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        /* Disease List */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Links */
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            input[type="text"] {
+                width: 90%;
+            }
+        }
+    </style>
     <script>
         function searchDisease() {
             let query = document.getElementById("search").value.toLowerCase();
@@ -35,7 +102,9 @@ HTML_TEMPLATE = """
                         resultsDiv.innerHTML = "<p>No results found.</p>";
                     } else {
                         data.forEach(disease => {
-                            let infoLink = disease.info_link_data.length ? `<a href="${disease.info_link_data[0][0]}" target="_blank">${disease.info_link_data[0][1]}</a>` : 'No Link Available';
+                            let infoLink = disease.info_link_data.length ? 
+                                `<a href="${disease.info_link_data[0][0]}" target="_blank">${disease.info_link_data[0][1]}</a>` 
+                                : 'No Link Available';
                             resultsDiv.innerHTML += `<p><strong>${disease.primary_name}</strong> - ${infoLink}</p>`;
                         });
                     }
