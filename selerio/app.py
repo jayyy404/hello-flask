@@ -1,8 +1,26 @@
 from flask import Flask, request, jsonify, render_template_string
 import json
 import os
+from google import genai
+from pydantic import BaseModel
+from requests.exceptions import RequestException
+from dotenv import load_dotenv, dotenv_values
+
+class Disease(BaseModel):
+    key_id: str
+    primary_name: str
+    consumer_name: str
+    word_synonyms: str
+    synonyms: list[str]
+    info_link_data: list[list[str]]
+
+load_dotenv()
+config = dotenv_values(".env")
+client = genai.Client(api_key=config['GEMINI_API_KEY'])
 
 app = Flask(__name__)
+
+diseases = []
 
 # Get the directory where the script is running
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
