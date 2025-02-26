@@ -3,7 +3,7 @@ import json
 import os
 
 # Load the JSON file
-with open('navarra/diseases.json', encoding="utf-8") as file:  # Works cross-platform
+with open('diseases.json', encoding="utf-8") as file:  # Works cross-platform
     data = json.load(file)
 
 app = Flask(__name__)
