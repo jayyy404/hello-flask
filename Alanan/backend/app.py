@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import json
 import os
 
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
