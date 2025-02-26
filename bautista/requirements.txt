@@ -1,4 +1,4 @@
-Flask==2.0.3
+Flask
 Flask-CORS==3.0.10
 gunicorn == 23.0.0
 python-dotenv==1.0.1
