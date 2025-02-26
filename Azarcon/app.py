@@ -42,20 +42,5 @@ def lookup_disease():
 
     return jsonify(results)
 
-@app.route('/ai_match', methods=['POST'])
-def ai_match():
-    query = request.form.get('query', '')
-    url = f"https://api.google.com/ai-studio/v1/match?key={API_key}"
-    headers = {
-        "Content-Type": "application/json"
-    }
-    data = {
-        "query": query,
-        "diseases": diseases
-    }
-    response = requests.post(url, headers=headers, json=data)
-    matched_diseases = response.json().get('matched_diseases', [])
-    return jsonify(matched_diseases)
-
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=10000)
