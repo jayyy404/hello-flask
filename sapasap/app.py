@@ -21,9 +21,9 @@ class Diagnosis(BaseModel):
 
 
 load_dotenv()
-config = dotenv_values(".env")
 
-genai.configure(api_key=config['GEMINI_API_KEY'])
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, "sapasap/frontend"))
