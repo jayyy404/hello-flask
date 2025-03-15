@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import json
 import os
 from dotenv import load_dotenv, dotenv_values
-from google import genai
+import google.generativeai as genai
+
 from pydantic import BaseModel
 
 
@@ -22,7 +23,7 @@ class Diagnosis(BaseModel):
 load_dotenv()
 config = dotenv_values(".env")
 
-client = genai.Client(api_key=config['GEMINI_API_KEY'])
+genai.configure(api_key=config['GEMINI_API_KEY'])
 
 
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, "sapasap/frontend"))
@@ -34,20 +35,21 @@ with open(json_path, encoding="utf-8") as f:
 
 
 def generate_diagnosis(symptoms):
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=[
-            "This is the existing data in JSON format: " + json.dumps(diseases_data),
-            "Match the closest disease with following symptoms: " + symptoms,
-            "Include the info_link_data in the response.",
-            "Return the top three matching items."
-        ],
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": list[Diagnosis]
-        }
-    )
-    return json.loads(response.text)
+    model = genai.GenerativeModel("gemini-2.0-flash")
+
+    response = model.generate_content(f"""
+        This is the existing data in JSON format: {json.dumps(diseases_data)}
+        Match the closest disease with the following symptoms: {symptoms}
+        Include the info_link_data in the response.
+        Return the top three matching items in JSON format.
+    """)
+
+    # Ensure the response is valid JSON
+    try:
+        return json.loads(response.text)
+    except json.JSONDecodeError:
+        return {"error": "Response is not valid JSON", "raw_response": response.text}
+
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -79,15 +81,14 @@ def ai_solution():
     if not disease_name:
         return jsonify({"solution": "No disease name provided."})
 
-    response = client.models.generate_content(  
-        model="gemini-2.0-flash",
-        contents=[
-            f"Provide a simple treatment or solution for {disease_name}.",
-            "Keep it clear and concise for a general audience."
-        ]
+    model = genai.GenerativeModel("gemini-2.0-flash")
+
+    response = model.generate_content(
+        f"Provide a simple treatment or solution for {disease_name}. Keep it clear and concise for a general audience."
     )
 
     return jsonify({"solution": response.text})
+
 
 
 if __name__ == "__main__":
