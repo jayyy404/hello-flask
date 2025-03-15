@@ -79,7 +79,7 @@ def ai_solution():
     if not disease_name:
         return jsonify({"solution": "No disease name provided."})
 
-    response = client.models.generate_content(
+    response = client.models.generate_content(  
         model="gemini-2.0-flash",
         contents=[
             f"Provide a simple treatment or solution for {disease_name}.",
